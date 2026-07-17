@@ -29,7 +29,7 @@ static uint32_t get_Time(void);
  *  =======================================================================
  */
 
-static uint32_t timerDelay[TIMER_COUNT] = {
+static uint32_t timer_Delay[TIMER_COUNT] = {
     1000,
     1000,
     1000,
@@ -37,7 +37,7 @@ static uint32_t timerDelay[TIMER_COUNT] = {
     15000 
 };
 
-static uint32_t timerPrev[TIMER_COUNT] = {0};
+static uint32_t timer_Prev[TIMER_COUNT] = {0};
 
 /** =======================================================================
  *  Device-specific implementations (to be customized)
@@ -56,28 +56,28 @@ static uint32_t get_Time(void)
  */
 
 // Set the delay for a timer at runtime
-void timerSetDelay(TimerID whichTimer, uint32_t delayMs)
+void timer_Set_Delay(TimerID which_Timer, uint32_t delayMs)
 {
-    if (whichTimer < TIMER_COUNT)
+    if (which_Timer < TIMER_COUNT)
     {
-        timerDelay[whichTimer] = delayMs;
+        timer_Delay[which_Timer] = delayMs;
     }
 }
 
-void timerReset(TimerID whichTimer)
+void timer_Reset(TimerID which_Timer)
 {
-    if (whichTimer < TIMER_COUNT)
+    if (which_Timer < TIMER_COUNT)
     {
-        timerPrev[whichTimer] = get_Time();
+        timer_Prev[which_Timer] = get_Time();
     }
 }
 
-bool awaitTimer(TimerID whichTimer)
+bool await_Timer(TimerID which_Timer)
 {
     uint32_t now = get_Time();
-    if ((uint32_t)(now - timerPrev[whichTimer]) >= timerDelay[whichTimer])
+    if ((uint32_t)(now - timer_Prev[which_Timer]) >= timer_Delay[which_Timer])
     {
-        timerPrev[whichTimer] = now;
+        timer_Prev[which_Timer] = now;
         return true;
     }
     return false;

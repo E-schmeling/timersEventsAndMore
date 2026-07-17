@@ -31,10 +31,10 @@ typedef enum
 
 
 
-bool awaitTimer(TimerID whichTimer);
+bool await_Timer(TimerID which_Timer);
 
-void timerReset(TimerID whichTimer);
+void timer_Reset(TimerID which_Timer);
 
-void timerSetDelay(TimerID whichTimer, uint32_t delayMs);
+void timer_Set_Delay(TimerID which_Timer, uint32_t delay_Ms);
 
 #endif // TIMER_H
