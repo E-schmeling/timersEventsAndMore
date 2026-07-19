@@ -81,7 +81,7 @@ uint8_t timer_Get_Delay(TimerID_t which_Timer, uint32_t* delayMs)
 {
     if (which_Timer < TIMER_COUNT || which_Timer < 0)
     {
-        delayMs = timerDelay[which_Timer];
+        *delayMs = timerDelay[which_Timer];
         return 0; // Success
     }
     else
