@@ -68,7 +68,7 @@ uint8_t timer_Set_Delay(TimerID_t which_Timer, uint32_t delayMs)
     if (which_Timer < TIMER_COUNT || which_Timer < 0)
     {
         timerDelay[which_Timer] = delayMs;
-        timerPrev[which_Timer] = get_Time();
+        timerPrev[which_Timer] = get_TimeMS();
         return 0; // Success
     }
     else
@@ -96,7 +96,7 @@ uint8_t timer_Reset(TimerID_t which_Timer)
 {
     if (which_Timer < TIMER_COUNT || which_Timer < 0)
     {
-        timerPrev[which_Timer] = get_Time();
+        timerPrev[which_Timer] = get_TimeMS();
         return 0; //Success
     }
     else
