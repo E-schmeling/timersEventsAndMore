@@ -49,7 +49,7 @@ uint8_t timer_Set_Delay(TimerID_t which_Timer, uint32_t delayMs);
  * @brief Get the delay for a timer.
  * 
  * @param which_Timer The id of the timer to get the delay for.
- * @param delayMs* Pointer to store the the current delay in milliseconds.
+ * @param[out] delayMs* Pointer to store the the current delay in milliseconds.
  * 
  * @return return errors:
  *              0 - Success
