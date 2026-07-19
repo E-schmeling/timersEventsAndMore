@@ -7,7 +7,6 @@
 #ifndef TIMER_H
 #define TIMER_H
 
-
 /** =======================================================================
  *  Defines
  *  =======================================================================
@@ -26,7 +25,7 @@ typedef enum
     ascentTimer,
     descentTimer,
     TIMER_COUNT
-} TimerID;
+} TimerID_t;
 
 
 /** =======================================================================
@@ -34,11 +33,35 @@ typedef enum
  *  =======================================================================
  */
 
+/**
+ * @brief Set the delay for a timer.
+ * 
+ * @param which_Timer The id of the timer to set the delay for.
+ * @param delayMs The new delay in milliseconds.
+ * 
+ * @return return errors:
+ *              0 - Success
+ *              1 - Error: Invalid Timer ID
+ */
+uint8_t timer_Set_Delay(TimerID_t which_Timer, uint32_t delayMs);
+
+/**
+ * @brief Get the delay for a timer.
+ * 
+ * @param which_Timer The id of the timer to get the delay for.
+ * @param delayMs* Pointer to store the the current delay in milliseconds.
+ * 
+ * @return return errors:
+ *              0 - Success
+ *              1 - Error: Invalid Timer ID
+ */
+uint8_t timer_Get_Delay(TimerID_t which_Timer, uint32_t* delayMs);
+
 
 /**
  * @brief Reset the timer.
  * 
- * @param whichTimer The id of the timer to reset.
+ * @param which_Timer The id of the timer to reset.
  * 
  * @return return errors:
  *              0 - Success
@@ -46,30 +69,19 @@ typedef enum
  * 
  * @note When starting a timer it must be reset or else it will immediately reset
  */
-uint8_t timerReset(TimerID whichTimer);
+uint8_t timer_Reset(TimerID_t which_Timer);
 
-/**
- * @brief Set the delay for a timer.
- * 
- * @param whichTimer The id of the timer to set the delay for.
- * @param delayMs The new delay in milliseconds.
- * 
- * @return return errors:
- *              0 - Success
- *              1 - Error: Invalid Timer ID
- */
-uint8_t timerSetDelay(TimerID whichTimer, uint32_t delayMs);
 
 /**
  * @brief Check if the timer has expired.
  * 
- * @param whichTimer The id of the timer to reset.
+ * @param which_Timer The id of the timer to reset.
  * 
  * @return The timer status of the timer. 
  *              0 - Timer has expired
  *              1 - Timer has not expired
  *              2 - Error: Invalid Timer ID
  */
- uint8_t timerAwait(TimerID whichTimer);
+ uint8_t timer_Await(TimerID_t which_Timer);
 
 #endif // TIMER_H
