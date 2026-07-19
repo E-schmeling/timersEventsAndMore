@@ -15,6 +15,7 @@
  *  Device-specific Defines
  *  =======================================================================
  */
+#include <windows.h>
 
 
 
@@ -29,13 +30,7 @@ static uint32_t get_TimeMS(void);
  *  =======================================================================
  */
 
-static uint32_t timerDelay[TIMER_COUNT] = {
-    1000,
-    1000,
-    1000,
-    10000,
-    15000 
-};
+static uint32_t timerDelay[TIMER_COUNT] = {0};
 
 static uint32_t timerPrev[TIMER_COUNT] = {0};
 
@@ -53,7 +48,7 @@ static uint32_t timerPrev[TIMER_COUNT] = {0};
  */
 static uint32_t get_TimeMS(void)
 {
-
+    return (uint32_t) GetTickCount(); // in windows.h, GetTickCount returns the number of ticks since device boot(i think, just specifying not since program start)
 
 }
 
@@ -68,7 +63,7 @@ uint8_t timer_Set_Delay(TimerID_t which_Timer, uint32_t delayMs)
     if (which_Timer < TIMER_COUNT || which_Timer < 0)
     {
         timerDelay[which_Timer] = delayMs;
-        timerPrev[which_Timer] = get_Time();
+        timerPrev[which_Timer] = get_TimeMS();
         return 0; // Success
     }
     else
@@ -81,7 +76,7 @@ uint8_t timer_Get_Delay(TimerID_t which_Timer, uint32_t* delayMs)
 {
     if (which_Timer < TIMER_COUNT || which_Timer < 0)
     {
-        delayMs = timerDelay[which_Timer];
+        *delayMs = timerDelay[which_Timer];
         return 0; // Success
     }
     else
@@ -96,7 +91,7 @@ uint8_t timer_Reset(TimerID_t which_Timer)
 {
     if (which_Timer < TIMER_COUNT || which_Timer < 0)
     {
-        timerPrev[which_Timer] = get_Time();
+        timerPrev[which_Timer] = get_TimeMS();
         return 0; //Success
     }
     else
