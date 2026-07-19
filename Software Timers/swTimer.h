@@ -19,11 +19,8 @@
  */
 typedef enum
 {
-    radioPulse = 0,
-    countDownTimer,
-    apogeeTimer,
-    ascentTimer,
-    descentTimer,
+    TIMER_ONE = 0,
+    TIMER_TWO,
     TIMER_COUNT
 } TimerID_t;
 
