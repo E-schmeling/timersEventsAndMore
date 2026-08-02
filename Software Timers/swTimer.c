@@ -22,7 +22,7 @@
  *  Function prototypes for internal routines
  *  =======================================================================
  */
-static uint32_t get_TimeMS(void);
+static uint32_t getTimeMS(void);
 
 /** =======================================================================
  *  Global Variables
@@ -51,7 +51,7 @@ static uint32_t timerPrev[TIMER_COUNT] = {0};
  *
  * @note This function should be implemented according to the specific hardware platform being used.
  */
-static uint32_t get_TimeMS(void)
+static uint32_t getTimeMS(void)
 {
 
 
@@ -63,12 +63,12 @@ static uint32_t get_TimeMS(void)
  *  =======================================================================
  * see swTimer.h for more details.s
  */
-uint8_t timer_Set_Delay(TimerID_t which_Timer, uint32_t delayMs)
+uint8_t timer_setDelay(TimerID_t which_Timer, uint32_t delayMs)
 {
     if (which_Timer < TIMER_COUNT || which_Timer < 0)
     {
         timerDelay[which_Timer] = delayMs;
-        timerPrev[which_Timer] = get_TimeMS();
+        timerPrev[which_Timer] = getTimeMS();
         return 0; // Success
     }
     else
@@ -77,7 +77,7 @@ uint8_t timer_Set_Delay(TimerID_t which_Timer, uint32_t delayMs)
     }
 }
 
-uint8_t timer_Get_Delay(TimerID_t which_Timer, uint32_t* delayMs)
+uint8_t timer_getDelay(TimerID_t which_Timer, uint32_t* delayMs)
 {
     if (which_Timer < TIMER_COUNT || which_Timer < 0)
     {
@@ -92,11 +92,11 @@ uint8_t timer_Get_Delay(TimerID_t which_Timer, uint32_t* delayMs)
 
 
 
-uint8_t timer_Reset(TimerID_t which_Timer)
+uint8_t timer_reset(TimerID_t which_Timer)
 {
     if (which_Timer < TIMER_COUNT || which_Timer < 0)
     {
-        timerPrev[which_Timer] = get_TimeMS();
+        timerPrev[which_Timer] = getTimeMS();
         return 0; //Success
     }
     else
@@ -105,9 +105,9 @@ uint8_t timer_Reset(TimerID_t which_Timer)
     }
 }
 
-uint8_t timer_Await(TimerID_t which_Timer)
+uint8_t timer_await(TimerID_t which_Timer)
 {
-    uint32_t now = get_TimeMS();
+    uint32_t now = getTimeMS();
     if (which_Timer >= TIMER_COUNT || which_Timer < 0)
     {
         return 2; //Error: Invalid Timer ID
