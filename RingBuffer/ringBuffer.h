@@ -1,4 +1,4 @@
-#include <stddef.h>
+#include <stdint.h>
 
 
 
@@ -6,20 +6,22 @@
 /**
  * @brief Represents a ring buffer.
  * 
- * - 'capacity'        is the maximum number of elements the buffer can hold, this should be storage size divided by element size
+ * - 'capacity'        is the maximum number of elements the buffer can hold
  * - 'count'           is the current number of elements in the buffer
  * - 'head'            is the index of the next element to be read
  * - 'tail'            is the index where the next element will be written
  * - 'elementSize'     is the size of each element in bytes
  * - 'storage'         is a pointer to the memory block used for storing elements
  */
+
+ //tail is the newest element and head is the oldest.
 typedef struct {
-    size_t capacity;
-    size_t count;
-    size_t head;
-    size_t tail;
+    uint32_t capacity;
+    uint32_t count;
+    uint32_t head;
+    uint32_t tail;
     
-    size_t elementSize;
+    uint32_t elementSize;
     void* storage;
 } ring_buffer_t;
 
@@ -36,10 +38,9 @@ typedef struct {
  * @return return errors:
  *              0 - Success
  *              1 - Error: Invalid parameters
- *              2 - Error: Capacity must be a multiple of element size
  *              3 - Error: Buffer already initialized
  */
-uint8_t rb_init(ring_buffer_t * buff, void* storage, size_t capacity, size_t elementSize); 
+uint8_t rb_init(ring_buffer_t * buff, void* storage, uint32_t capacity, uint32_t elementSize); 
 
 
 
@@ -53,6 +54,8 @@ uint8_t rb_init(ring_buffer_t * buff, void* storage, size_t capacity, size_t ele
  *              0 - Success
  *              1 - Error: Invalid parameters
  *              2 - Error: Buffer is full
+ *              3 - Error: Buffer not initialized
+ *              4 - Error: Memory copy failed
  */
 uint8_t rb_push(ring_buffer_t * buff, void * data);
 
@@ -69,6 +72,9 @@ uint8_t rb_push(ring_buffer_t * buff, void * data);
  * @return return errors:
  *              0 - Success
  *              1 - Error: Invalid parameters
+ *              3 - Error: Buffer not initialized
+ *              4 - Error: Memory copy failed
+ *              5 - Error: Unknown error
  */
 uint8_t rb_rotate(ring_buffer_t * buff, void * data);
 
@@ -84,7 +90,7 @@ uint8_t rb_rotate(ring_buffer_t * buff, void * data);
  *              0 - Success
  *              1 - Error: Invalid parameters
  */
-uint8_t rb_at(ring_buffer_t * buff, size_t index, void * data);
+uint8_t rb_at(ring_buffer_t * buff, int32_t index, void * data);
 
 
 

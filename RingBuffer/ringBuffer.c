@@ -1,16 +1,14 @@
-#include <stdint.h> 
+#include <stdint.h>
+#include <string.h>
 
 #include "ringBuffer.h"
 
-uint8_t rb_init(ring_buffer_t * buff, void* storage, size_t capacity, size_t elementSize)
+
+uint8_t rb_init(ring_buffer_t * buff, void* storage, uint32_t capacity, uint32_t elementSize)
 {
     if (buff == NULL || storage == NULL || capacity == 0 || elementSize == 0)
     {
         return 1; // Error: Invalid parameters
-    }
-    if (capacity % elementSize != 0)
-    {
-        return 2; // Error: Capacity must be a multiple of element size
     }
     if (buff->storage != NULL)
     {
@@ -27,3 +25,125 @@ uint8_t rb_init(ring_buffer_t * buff, void* storage, size_t capacity, size_t ele
     return 0;
 }
 
+
+
+uint8_t rb_push(ring_buffer_t * buff, void * data)
+{
+    if (buff == NULL || data == NULL)
+    {
+        return 1; // Error: Invalid parameters
+    }
+    if (buff->count >= buff->capacity)
+    {
+        return 2; // Error: Buffer is full
+    }
+    if (buff->storage == NULL)
+    {
+        return 3; // Error: Buffer not initialized
+    }
+
+
+    // Find the index of new element which is the tail index + 1, if the index is greater than capacity,
+    // wrap around to the beginning of the buffer. This I believe, is faster than using the modulus opertator, 
+    // escpecially in non optimised situations when the capacity is not a power of 2.
+    uint32_t index = buff->tail + 1;
+    if (index >= buff->capacity)
+    {
+        index = 0;
+    }
+
+    uint8_t * ret = memcpy((uint8_t*)buff->storage + (index * buff->elementSize), data, buff->elementSize);
+
+    if (ret != (uint8_t*)buff->storage + (index * buff->elementSize))
+    {
+        return 4; // Error: Memory copy failed
+    }
+    buff->tail = index;
+    buff->count++;
+    return 0; // Success
+}
+
+
+
+uint8_t rb_rotate(ring_buffer_t * buff, void * data)
+{
+
+    if (buff == NULL || data == NULL)
+    {
+        return 1; // Error: Invalid parameters
+    }
+    if (buff->storage == NULL)
+    {
+        return 3; // Error: Buffer not initialized
+    }
+
+
+    // In the situation where the buffer is not full, the element can be added identically to the push implementation.
+    if (buff->count < buff->capacity)
+    {
+        return rb_push(buff, data);
+    }
+
+
+    // In the situation where the buffer is full, the oldest element (head) is discarded and the new element is added at the tail.
+    // There is probably a good way to write the two situations in a single function but I know the rb_push should work for its use.
+    
+    if (buff->count == buff->capacity)
+    {
+        uint32_t index = buff->head;
+        if (index >= buff->capacity)
+        {
+            index = 0;
+        }
+        uint8_t * ret = memcpy((uint8_t*)buff->storage + (index * buff->elementSize), data, buff->elementSize);
+        if (ret != (uint8_t*)buff->storage + (index * buff->elementSize))
+        {
+            return 4; // Error: Memory copy failed
+        }
+        buff->head = index + 1;
+        buff->tail = index;
+        return 0; // Success
+    }
+
+
+    return 5; // Error: Unknown error
+}
+
+
+
+uint8_t rb_at(ring_buffer_t * buff, int32_t index, void * data)
+{
+    if (buff == NULL || data == NULL)
+    {
+        return 1; // Error: Invalid parameters
+    }
+    if (buff->count == 0)
+    {
+        return 2; // Error: Buffer is empty
+    }
+    // If the index is negative, convert it to a positive index where -1 is the newest element.
+    if (index < 0)
+    {
+        index = (int32_t)buff->count + index;
+    }
+
+    if (index < 0 || (uint32_t)index >= buff->count)
+    {
+        return 3; // Error: Index out of bounds
+    }
+
+    // Calculate the actual index in the storage array
+    uint32_t actualIndex = (buff->head + (uint32_t)index);
+    if (actualIndex >= buff->capacity)
+    {
+        actualIndex -= buff->capacity;
+    }
+
+    uint8_t * ret = memcpy(data, (uint8_t*)buff->storage + (actualIndex * buff->elementSize), buff->elementSize);
+    if (ret != data)
+    {
+        return 4; // Error: Memory copy failed
+    }
+    return 0; // Success
+
+}
