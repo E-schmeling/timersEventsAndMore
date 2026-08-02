@@ -1,9 +1,32 @@
+/**
+ * @file ringBuffer.c
+ * @brief Ring buffer implementation in C.
+ * @author ERS
+ *
+ * This implementation provides a framework for a ring buffer in C. It allows for the storage and retrieval of elements in a circular manner, making it suitable for scenarios where a fixed-size buffer is needed.
+ * There are two main functions for adding elements to the buffer: rb_push and rb_rotate. The rb_push function adds a new element to the buffer and will fail when the buffer is full, while the rb_rotate function
+ * discards the oldest element when the buffer is full ensuring that the buffer always contains the most recent elements.
+ */
+
+ /** =======================================================================
+ *  Routine Defines
+ *  =======================================================================
+ */
 #include <stdint.h>
 #include <string.h>
-
 #include "ringBuffer.h"
 
 
+
+#ifdef __cplusplus
+    extern "C" 
+        {
+#endif
+/** =======================================================================
+ *  Public API
+ *  =======================================================================
+ * see ringBuffer.h for more details.s
+ */
 uint8_t rb_init(ring_buffer_t * buff, void* storage, uint32_t capacity, uint32_t elementSize)
 {
     if (buff == NULL || storage == NULL || capacity == 0 || elementSize == 0)
@@ -167,6 +190,13 @@ uint8_t rb_newest(ring_buffer_t * buff, void * data)
     {
         return 4; // Error: Memory copy failed
     }
+    // Update the tail index to point to the next newest element
+    buff->tail++;
+    if (buff->tail >= buff->capacity)
+    {
+        buff->tail = 0;
+    }
+    buff->count--;
     return 0; // Success
 
 }
@@ -188,6 +218,17 @@ uint8_t rb_oldest(ring_buffer_t * buff, void * data)
     {
         return 4; // Error: Memory copy failed
     }
+
+    // Update the head index to point to the next oldest element
+    buff->head++;
+    if (buff->head >= buff->capacity)
+    {
+        buff->head = 0;
+    }
+    buff->count--;
     return 0; // Success
 
 }
+#ifdef __cplusplus
+    }
+#endif

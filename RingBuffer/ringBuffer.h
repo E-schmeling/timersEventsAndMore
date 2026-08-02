@@ -1,8 +1,22 @@
+/**
+ * @file ringBuffer.h
+ * @brief Ring Buffer Implementation.
+ * @author ERS
+ *
+ */
+#ifndef RING_BUFFER_H
+#define RING_BUFFER_H
+
+/** =======================================================================
+ *  Defines
+ *  =======================================================================
+ */
 #include <stdint.h>
 
-
-
-
+/** =======================================================================
+ *  Enumerations and Types
+ *  =======================================================================
+ */
 /**
  * @brief Represents a ring buffer.
  * 
@@ -26,6 +40,11 @@ typedef struct {
 } ring_buffer_t;
 
 
+
+/** =======================================================================
+ *  Public API 
+ *  =======================================================================
+ */
 
 /**
  * @brief Initializes a ring buffer.
@@ -118,3 +137,5 @@ uint8_t rb_newest(ring_buffer_t * buff, void * data);
  *              2 - Error: Buffer is empty
  */
 uint8_t rb_oldest(ring_buffer_t * buff, void * data);
+
+#endif // RING_BUFFER_H
