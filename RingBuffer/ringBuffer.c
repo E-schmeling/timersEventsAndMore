@@ -43,10 +43,10 @@ uint8_t rb_push(ring_buffer_t * buff, void * data)
     }
 
 
-    // Find the index of new element which is the tail index + 1, if the index is greater than capacity,
+    // Find the index of new element which is the tail index, if the index is greater than capacity,
     // wrap around to the beginning of the buffer. This I believe, is faster than using the modulus opertator, 
     // escpecially in non optimised situations when the capacity is not a power of 2.
-    uint32_t index = buff->tail + 1;
+    uint32_t index = buff->tail;
     if (index >= buff->capacity)
     {
         index = 0;
@@ -58,7 +58,7 @@ uint8_t rb_push(ring_buffer_t * buff, void * data)
     {
         return 4; // Error: Memory copy failed
     }
-    buff->tail = index;
+    buff->tail = index+1;
     buff->count++;
     return 0; // Success
 }
@@ -140,6 +140,50 @@ uint8_t rb_at(ring_buffer_t * buff, int32_t index, void * data)
     }
 
     uint8_t * ret = memcpy(data, (uint8_t*)buff->storage + (actualIndex * buff->elementSize), buff->elementSize);
+    if (ret != data)
+    {
+        return 4; // Error: Memory copy failed
+    }
+    return 0; // Success
+
+}
+
+
+
+uint8_t rb_newest(ring_buffer_t * buff, void * data)
+{
+    if (buff == NULL || data == NULL)
+    {
+        return 1; // Error: Invalid parameters
+    }
+    if (buff->count == 0)
+    {
+        return 2; // Error: Buffer is empty
+    }
+
+    uint32_t index = buff->tail;
+    uint8_t * ret = memcpy(data, (uint8_t*)buff->storage + (index * buff->elementSize), buff->elementSize);
+    if (ret != data)
+    {
+        return 4; // Error: Memory copy failed
+    }
+    return 0; // Success
+
+}
+
+uint8_t rb_oldest(ring_buffer_t * buff, void * data)
+{
+    if (buff == NULL || data == NULL)
+    {
+        return 1; // Error: Invalid parameters
+    }
+    if (buff->count == 0)
+    {
+        return 2; // Error: Buffer is empty
+    }
+
+    uint32_t index = buff->head;
+    uint8_t * ret = memcpy(data, (uint8_t*)buff->storage + (index * buff->elementSize), buff->elementSize);
     if (ret != data)
     {
         return 4; // Error: Memory copy failed
