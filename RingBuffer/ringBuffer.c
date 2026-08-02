@@ -185,17 +185,22 @@ uint8_t rb_newest(ring_buffer_t * buff, void * data)
     }
 
     uint32_t index = buff->tail;
+    if (index == 0)
+    {
+        index = buff->capacity - 1;
+    }
+    else
+    {
+        index--;
+    }
+
     uint8_t * ret = memcpy(data, (uint8_t*)buff->storage + (index * buff->elementSize), buff->elementSize);
     if (ret != data)
     {
         return 4; // Error: Memory copy failed
     }
-    // Update the tail index to point to the next newest element
-    buff->tail++;
-    if (buff->tail >= buff->capacity)
-    {
-        buff->tail = 0;
-    }
+
+    buff->tail = index;
     buff->count--;
     return 0; // Success
 

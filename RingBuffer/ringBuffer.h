@@ -51,7 +51,7 @@ typedef struct {
  * 
  * @param buff Pointer to the ring buffer structure to be initialized
  * @param storage Pointer to the memory block used for storing elements
- * @param capacity The maximum number of elements the buffer can hold
+ * @param capacity The maximum number of elements the buffer can hold, expressed as an element count
  * @param elementSize The size of each element in bytes
  * 
  * @return return errors:
@@ -108,6 +108,9 @@ uint8_t rb_rotate(ring_buffer_t * buff, void * data);
  * @return return errors:
  *              0 - Success
  *              1 - Error: Invalid parameters
+ *              2 - Error: Buffer is empty
+ *              3 - Error: Index out of bounds
+ *              4 - Error: Memory copy failed
  */
 uint8_t rb_at(ring_buffer_t * buff, int32_t index, void * data);
 
@@ -120,6 +123,10 @@ uint8_t rb_at(ring_buffer_t * buff, int32_t index, void * data);
  * @param data Pointer to the buffer where the removed element will be copied
  * 
  * @return return errors:
+ *              0 - Success
+ *              1 - Error: Invalid parameters
+ *              2 - Error: Buffer is empty
+ *              4 - Error: Memory copy failed
  */
 uint8_t rb_newest(ring_buffer_t * buff, void * data);
 
@@ -135,6 +142,7 @@ uint8_t rb_newest(ring_buffer_t * buff, void * data);
  *              0 - Success
  *              1 - Error: Invalid parameters
  *              2 - Error: Buffer is empty
+ *              4 - Error: Memory copy failed
  */
 uint8_t rb_oldest(ring_buffer_t * buff, void * data);
 
