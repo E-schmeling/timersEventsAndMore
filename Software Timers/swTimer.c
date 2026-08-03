@@ -29,6 +29,13 @@ static uint32_t getTimeMS(void);
  *  =======================================================================
  */
 
+/**
+ * @brief List of timer delay lengths which coorrespond to each timer
+ * 
+ * @note This array should be updated with the desired delay or switched to {0}
+ *          and set the delay length of timers manually with timer_setDelay()
+
+ */
 static uint32_t timerDelay[TIMER_COUNT] = {
     1000,
     1000,
@@ -37,6 +44,9 @@ static uint32_t timerDelay[TIMER_COUNT] = {
     15000 
 };
 
+/**
+ * @brief List of timer previous timestamps which coorrespond to each timer.
+ */
 static uint32_t timerPrev[TIMER_COUNT] = {0};
 
 /** =======================================================================
