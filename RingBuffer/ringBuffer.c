@@ -234,6 +234,17 @@ uint8_t rb_oldest(ring_buffer_t * buff, void * data)
     return 0; // Success
 
 }
+
+int32_t rb_count(ring_buffer_t * buff)
+{
+    if (buff == NULL)
+    {
+        return -1; // Error: Invalid parameters
+    }
+    return (int32_t)buff->count;
+}
+
+
 #ifdef __cplusplus
     }
 #endif

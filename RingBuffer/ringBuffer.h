@@ -146,4 +146,14 @@ uint8_t rb_newest(ring_buffer_t * buff, void * data);
  */
 uint8_t rb_oldest(ring_buffer_t * buff, void * data);
 
+
+/**
+ * @brief Returns the current number of elements in the ring buffer.
+ * 
+ * @param buff Pointer to the ring buffer
+ * 
+ * @return The current number of elements in the buffer
+ */
+int32_t rb_count(ring_buffer_t * buff);
+
 #endif // RING_BUFFER_H
