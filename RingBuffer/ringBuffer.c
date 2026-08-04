@@ -25,7 +25,7 @@
 /** =======================================================================
  *  Public API
  *  =======================================================================
- * see ringBuffer.h for more details.s
+ * see ringBuffer.h for more details.
  */
 uint8_t rb_init(ring_buffer_t * buff, void* storage, uint32_t capacity, uint32_t elementSize)
 {
