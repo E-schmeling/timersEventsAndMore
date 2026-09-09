@@ -15,7 +15,6 @@
  *  Device-specific Defines
  *  =======================================================================
  */
-#include <windows.h>
 
 
 
@@ -30,8 +29,24 @@ static uint32_t getTimeMS(void);
  *  =======================================================================
  */
 
-static uint32_t timerDelay[TIMER_COUNT] = {0};
+/**
+ * @brief List of timer delay lengths which coorrespond to each timer
+ * 
+ * @note This array should be updated with the desired delay or switched to {0}
+ *          and set the delay length of timers manually with timer_setDelay()
 
+ */
+static uint32_t timerDelay[TIMER_COUNT] = {
+    1000,
+    1000,
+    1000,
+    10000,
+    15000 
+};
+
+/**
+ * @brief List of timer previous timestamps which coorrespond to each timer.
+ */
 static uint32_t timerPrev[TIMER_COUNT] = {0};
 
 /** =======================================================================
@@ -48,7 +63,7 @@ static uint32_t timerPrev[TIMER_COUNT] = {0};
  */
 static uint32_t getTimeMS(void)
 {
-    return (uint32_t) GetTickCount(); // in windows.h, GetTickCount returns the number of ticks since device boot(i think, just specifying not since program start)
+
 
 }
 
@@ -58,7 +73,7 @@ static uint32_t getTimeMS(void)
  *  =======================================================================
  * see swTimer.h for more details.s
  */
-uint8_t timer_setDelay(TimerID_t which_Timer, uint32_t delayMs)
+uint8_t timer_setDelay(swTimerID_t which_Timer, uint32_t delayMs)
 {
     if (which_Timer < TIMER_COUNT || which_Timer < 0)
     {
@@ -72,7 +87,7 @@ uint8_t timer_setDelay(TimerID_t which_Timer, uint32_t delayMs)
     }
 }
 
-uint8_t timer_getDelay(TimerID_t which_Timer, uint32_t* delayMs)
+uint8_t timer_getDelay(swTimerID_t which_Timer, uint32_t* delayMs)
 {
     if (which_Timer < TIMER_COUNT || which_Timer < 0)
     {
@@ -87,7 +102,7 @@ uint8_t timer_getDelay(TimerID_t which_Timer, uint32_t* delayMs)
 
 
 
-uint8_t timer_reset(TimerID_t which_Timer)
+uint8_t timer_reset(swTimerID_t which_Timer)
 {
     if (which_Timer < TIMER_COUNT || which_Timer < 0)
     {
@@ -100,7 +115,7 @@ uint8_t timer_reset(TimerID_t which_Timer)
     }
 }
 
-uint8_t timer_await(TimerID_t which_Timer)
+uint8_t timer_await(swTimerID_t which_Timer)
 {
     uint32_t now = getTimeMS();
     if (which_Timer >= TIMER_COUNT || which_Timer < 0)

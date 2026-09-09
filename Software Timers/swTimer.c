@@ -73,7 +73,7 @@ static uint32_t getTimeMS(void)
  *  =======================================================================
  * see swTimer.h for more details.s
  */
-uint8_t timer_setDelay(TimerID_t which_Timer, uint32_t delayMs)
+uint8_t timer_setDelay(swTimerID_t which_Timer, uint32_t delayMs)
 {
     if (which_Timer < TIMER_COUNT || which_Timer < 0)
     {
@@ -87,7 +87,7 @@ uint8_t timer_setDelay(TimerID_t which_Timer, uint32_t delayMs)
     }
 }
 
-uint8_t timer_getDelay(TimerID_t which_Timer, uint32_t* delayMs)
+uint8_t timer_getDelay(swTimerID_t which_Timer, uint32_t* delayMs)
 {
     if (which_Timer < TIMER_COUNT || which_Timer < 0)
     {
@@ -102,7 +102,7 @@ uint8_t timer_getDelay(TimerID_t which_Timer, uint32_t* delayMs)
 
 
 
-uint8_t timer_reset(TimerID_t which_Timer)
+uint8_t timer_reset(swTimerID_t which_Timer)
 {
     if (which_Timer < TIMER_COUNT || which_Timer < 0)
     {
@@ -115,7 +115,7 @@ uint8_t timer_reset(TimerID_t which_Timer)
     }
 }
 
-uint8_t timer_await(TimerID_t which_Timer)
+uint8_t timer_await(swTimerID_t which_Timer)
 {
     uint32_t now = getTimeMS();
     if (which_Timer >= TIMER_COUNT || which_Timer < 0)

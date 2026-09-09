@@ -4,8 +4,8 @@
  * @author ERS
  *
  */
-#ifndef TIMER_H
-#define TIMER_H
+#ifndef SWTIMER_H
+#define SWTIMER_H
 
 /** =======================================================================
  *  Defines
@@ -22,7 +22,7 @@ typedef enum
     TIMER_ONE = 0,
     TIMER_TWO,
     TIMER_COUNT
-} TimerID_t;
+} swTimerID_t;
 
 
 /** =======================================================================
@@ -40,7 +40,7 @@ typedef enum
  *              0 - Success
  *              1 - Error: Invalid Timer ID
  */
-uint8_t timer_setDelay(TimerID_t which_Timer, uint32_t delayMs);
+uint8_t swTimer_setDelay(swTimerID_t which_Timer, uint32_t delayMs);
 
 /**
  * @brief Get the delay for a timer.
@@ -52,7 +52,7 @@ uint8_t timer_setDelay(TimerID_t which_Timer, uint32_t delayMs);
  *              0 - Success
  *              1 - Error: Invalid Timer ID
  */
-uint8_t timer_getDelay(TimerID_t which_Timer, uint32_t* delayMs);
+uint8_t swTimer_getDelay(swTimerID_t which_Timer, uint32_t* delayMs);
 
 
 /**
@@ -66,7 +66,7 @@ uint8_t timer_getDelay(TimerID_t which_Timer, uint32_t* delayMs);
  * 
  * @note When starting a timer it must be reset or else it will immediately reset
  */
-uint8_t timer_reset(TimerID_t which_Timer);
+uint8_t swTimer_reset(swTimerID_t which_Timer);
 
 
 /**
@@ -86,6 +86,6 @@ uint8_t timer_reset(TimerID_t which_Timer);
  *       with this arrangement, where 0 means true and 1 means false is odd but lets 
  *       you use 'simpler' checks and not consider an ID error as a 'success' 
  */
- uint8_t timer_await(TimerID_t which_Timer);
+ uint8_t swTimer_await(swTimerID_t which_Timer);
 
-#endif // TIMER_H
+#endif // SWTIMER_H
