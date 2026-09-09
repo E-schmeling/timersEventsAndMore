@@ -160,14 +160,18 @@ uint8_t hwTimers_set(hwTimer_t timer, uint32_t msTime, hwTimer_Callback_t callba
         return 5; //Error: Time cannot be zero
     }
 
+    timerCallback[timer] = callback;
+    timerStatus[timer] = 1;
+
     uint8_t status = hwtimer_backend_arm(timer, msTime);
     if(status != 0)
     {
+        timerCallback[timer] = 0;
+        timerStatus[timer] = 0;
         return 8 + status; //Error: User defined error in setting the timer 
     } 
-    timerCallback[timer] = callback;
-    timerStatus[timer] = 1;
     return 0; // Success
+
 }
 
 uint8_t hwTimers_disarm(hwTimer_t timer)
