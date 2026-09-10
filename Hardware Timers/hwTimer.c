@@ -111,7 +111,12 @@ static uint8_t timer_resolve(hwTimer_t timer)
     }
     // Stop the event source before the callback; ISR-context failures have no public error path.
     (void)hwtimer_backend_disarm(timer);
-    timerCallback[timer]();
+
+    if (timerCallback[timer] != 0)
+    {
+        timerCallback[timer]();
+    }
+    
     timerStatus[timer] = false;
     timerCallback[timer] = 0; 
 
