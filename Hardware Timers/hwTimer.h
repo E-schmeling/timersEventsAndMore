@@ -71,6 +71,37 @@ uint8_t hwTimers_init();
 uint8_t hwTimers_set(hwTimer_t timer, uint32_t msTime, hwTimer_Callback_t callback);
 
 /**
+ * @brief Preempts a timer and starts it again with a new callback.
+ *
+ * If @p timer is running, its countdown is stopped and reset to @p msTime.
+ * The callback it would have invoked is returned through @p displacedCallback;
+ * the caller owns deciding whether to notify it or invoke it after its own
+ * callback completes.  When the timer was idle, @p displacedCallback is set
+ * to NULL.
+ *
+ * Unlike hwTimers_set(), this function succeeds when the selected timer is
+ * already running.
+ * 
+ * It does not invoke the displaced callback.
+ *
+ * @param timer The timer to preempt and start.
+ * @param msTime The new timeout in milliseconds.
+ * @param callback The callback to invoke when the new timeout expires.
+ * @param displacedCallback Receives the callback displaced by this grab.
+ *
+ * @return Error codes
+ *          0 - Success
+ *          2 - Invalid timer
+ *          3 - Hardware timers are not initialised
+ *          4 - Invalid callback function
+ *          5 - Time cannot be zero
+ *          6 - Invalid displaced-callback output pointer
+ *      8 + n - Backend arm error n
+ */
+uint8_t hwTimers_grab(hwTimer_t timer, uint32_t msTime, hwTimer_Callback_t callback, hwTimer_Callback_t *displacedCallback);
+
+
+/**
  * @brief Stops a running timer and clears its callback.
  *
  * The backend must prevent future events from the timer and clear any stale

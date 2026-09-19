@@ -79,6 +79,14 @@ static uint8_t hwtimer_backend_disarm(hwTimer_t timer)
 {
     return 0;
 }
+static uint32_t hwtimer_backend_enter_critical(void)
+{
+
+}
+
+static void hwtimer_backend_exit_critical(uint32_t state)
+{
+}
 
 
 //for any callback handlers, directly call into timer_resolve with the id of the timer 
@@ -178,6 +186,46 @@ uint8_t hwTimers_set(hwTimer_t timer, uint32_t msTime, hwTimer_Callback_t callba
     return 0; // Success
 
 }
+
+uint8_t hwTimers_grab(hwTimer_t timer, uint32_t msTime, hwTimer_Callback_t callback, hwTimer_Callback_t *displacedCallback)
+{
+    if (timer >= TIMER_COUNT)
+    {
+        return 2;
+    }
+    if (isInitialised == false)
+    {
+        return 3;
+    }
+    if (callback == 0)
+    {
+        return 4;
+    }
+    if (msTime == 0)
+    {
+        return 5;
+    }
+    if (displacedCallback == 0)
+    {
+        return 6;
+    }
+
+    uint32_t interruptState = hwtimer_backend_enter_critical();
+    hwTimer_Callback_t previousCallback = timerCallback[timer];
+    uint8_t status = hwtimer_backend_arm(timer, msTime);
+    if (status != 0)
+    {
+        hwtimer_backend_exit_critical(interruptState);
+        return 8 + status;
+    }
+
+    *displacedCallback = previousCallback;
+    timerCallback[timer] = callback;
+    timerStatus[timer] = 1;
+    hwtimer_backend_exit_critical(interruptState);
+    return 0;
+}
+
 
 uint8_t hwTimers_disarm(hwTimer_t timer)
 {
